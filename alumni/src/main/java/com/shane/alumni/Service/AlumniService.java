@@ -12,4 +12,6 @@ public interface AlumniService {
 
     List<AlumniDto> getAllAlumni();
 
+    AlumniDto updateAlumni(Long alumniId, AlumniDto updatedAlumni);
+
 }

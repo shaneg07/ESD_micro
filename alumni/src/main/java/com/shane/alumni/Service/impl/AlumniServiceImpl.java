@@ -41,4 +41,20 @@ public class AlumniServiceImpl implements AlumniService {
         return alumniList.stream().map((alumni) -> AlumniMapper.mapToAlumniDto(alumni))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public AlumniDto updateAlumni(Long alumniId, AlumniDto updatedAlumni) {
+
+        Alumni alumni = alumniRepository.findById(alumniId).orElseThrow(
+                () -> new ResourceNotFound("Alumni Id does not exist - " + alumniId)
+        );
+
+        alumni.setFirstName(updatedAlumni.getFirstName());
+        alumni.setLastName(updatedAlumni.getLastName());
+        alumni.setEmail(updatedAlumni.getEmail());
+
+        Alumni updatedAlumniObj = alumniRepository.save(alumni);
+
+        return AlumniMapper.mapToAlumniDto(updatedAlumniObj);
+    }
 }

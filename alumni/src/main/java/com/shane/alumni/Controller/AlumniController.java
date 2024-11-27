@@ -38,4 +38,13 @@ public class AlumniController {
         List<AlumniDto> alumniList = alumniService.getAllAlumni();
         return ResponseEntity.ok(alumniList);
     }
+
+    //Add alumni update API
+    @PutMapping("{id}")
+    public ResponseEntity<AlumniDto> updateAlumni(@PathVariable("id") Long alumniId,
+                                                  @RequestBody AlumniDto updatedAlumni){
+        AlumniDto alumniDto= alumniService.updateAlumni(alumniId, updatedAlumni);
+        return ResponseEntity.ok(alumniDto);
+    }
+
 }
