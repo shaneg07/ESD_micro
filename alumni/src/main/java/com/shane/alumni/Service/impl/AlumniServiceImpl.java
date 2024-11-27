@@ -57,4 +57,14 @@ public class AlumniServiceImpl implements AlumniService {
 
         return AlumniMapper.mapToAlumniDto(updatedAlumniObj);
     }
+
+    @Override
+    public void deleteAlumni(Long alumniId) {
+
+        Alumni alumni = alumniRepository.findById(alumniId).orElseThrow(
+                () -> new ResourceNotFound("Alumni Id does not exist - " + alumniId)
+        );
+
+        alumniRepository.deleteById(alumniId);
+    }
 }

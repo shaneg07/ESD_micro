@@ -47,4 +47,11 @@ public class AlumniController {
         return ResponseEntity.ok(alumniDto);
     }
 
+    //Add alumni delete API
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteAlumni(@PathVariable("id") Long alumniId) {
+        alumniService.deleteAlumni(alumniId);
+        return ResponseEntity.ok("Alumni deleted.");
+    }
+
 }

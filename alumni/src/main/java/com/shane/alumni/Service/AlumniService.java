@@ -14,4 +14,6 @@ public interface AlumniService {
 
     AlumniDto updateAlumni(Long alumniId, AlumniDto updatedAlumni);
 
+    void deleteAlumni(Long alumniId);
+
 }
