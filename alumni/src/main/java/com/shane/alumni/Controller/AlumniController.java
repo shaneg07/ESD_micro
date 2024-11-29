@@ -1,57 +1,42 @@
 package com.shane.alumni.Controller;
 
 
-import com.shane.alumni.Dto.AlumniDto;
+import com.shane.alumni.Dto.LoginRequest;
+import com.shane.alumni.Dto.RegistrationRequest;
+import com.shane.alumni.Dto.SearchRequest;
 import com.shane.alumni.Entity.Alumni;
+import com.shane.alumni.Exception.InvalidCredentialsException;
 import com.shane.alumni.Service.AlumniService;
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/alumni")
+@RequestMapping("/api/alumni/")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AlumniController {
-    private AlumniService alumniService;
+    private final AlumniService alumniService;
 
-    //Add alumni post API
-    @PostMapping
-    public ResponseEntity<AlumniDto> createAlumni(@RequestBody AlumniDto alumniDto) {
-        AlumniDto savedAlumni = alumniService.createAlumni(alumniDto);
-        return new ResponseEntity<>(savedAlumni, HttpStatus.CREATED);
+    @PostMapping("login")
+    public ResponseEntity<String> loginAlumni(@RequestBody @Valid LoginRequest loginRequest) {
+        String token = alumniService.loginAlumni(loginRequest);
+        if(token != null)
+        {
+            return ResponseEntity.ok(token);
+        }
+        throw new InvalidCredentialsException("Invalid credentials provided.");
     }
 
-    //Add alumni get API
-    @GetMapping("{id}")
-    public ResponseEntity<AlumniDto> getAlumniById(@PathVariable("id") Long alumniId) {
-        AlumniDto alumniDto = alumniService.getAlumniById(alumniId);
-        return ResponseEntity.ok(alumniDto);
+    @PostMapping("register")
+    public ResponseEntity<String> registerAlumni(@RequestBody @Valid RegistrationRequest registrationRequest) {
+        return ResponseEntity.ok(alumniService.registerAlumni(registrationRequest));
     }
 
-    //Add alumni get All API
-    @GetMapping
-    public ResponseEntity<List<AlumniDto>> getAllAlumni(){
-        List<AlumniDto> alumniList = alumniService.getAllAlumni();
-        return ResponseEntity.ok(alumniList);
+    @PostMapping("search")
+    public ResponseEntity<Alumni> searchAlumni(@RequestBody @Valid SearchRequest searchRequest) {
+        return ResponseEntity.ok(alumniService.searchAlumni(searchRequest));
     }
-
-    //Add alumni update API
-    @PutMapping("{id}")
-    public ResponseEntity<AlumniDto> updateAlumni(@PathVariable("id") Long alumniId,
-                                                  @RequestBody AlumniDto updatedAlumni){
-        AlumniDto alumniDto= alumniService.updateAlumni(alumniId, updatedAlumni);
-        return ResponseEntity.ok(alumniDto);
-    }
-
-    //Add alumni delete API
-    @DeleteMapping("{id}")
-    public ResponseEntity<String> deleteAlumni(@PathVariable("id") Long alumniId) {
-        alumniService.deleteAlumni(alumniId);
-        return ResponseEntity.ok("Alumni deleted.");
-    }
-
 }
